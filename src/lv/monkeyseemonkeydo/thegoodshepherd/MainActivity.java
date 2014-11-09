@@ -22,7 +22,7 @@ public class MainActivity extends Activity {
 
 			@Override
 			public void run() {
-				Util.runSudo("uname -a");
+				Util.runSudo(getResources(), "uname -a");
 			}
 
 		}).start();

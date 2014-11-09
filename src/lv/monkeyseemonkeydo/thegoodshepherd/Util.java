@@ -1,12 +1,13 @@
 package lv.monkeyseemonkeydo.thegoodshepherd;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 
+import org.apache.commons.io.IOUtils;
+
+import android.content.res.Resources;
 import android.util.Log;
 
 import com.trilead.ssh2.ChannelCondition;
@@ -18,12 +19,20 @@ public class Util {
 	private static final String USER = "cepe";
 	private static final String PASSWORD = "z";
 
-	public static void runSudo(String command) {
+	private static char[] getPrivateKey(Resources res) throws IOException {
+		InputStream is = res.openRawResource(R.raw.private_key);
+		char[] key = IOUtils.toCharArray(is);
+		is.close();
+
+		return key;
+	}
+
+	public static void runSudo(Resources res, String command) {
 		Connection conn = new Connection(HOST);
 		try {
 			conn.setTCPNoDelay(true);
 			conn.connect();
-			conn.authenticateWithPassword(USER, PASSWORD);
+			conn.authenticateWithPublicKey(USER, getPrivateKey(res), null);
 			final Session session = conn.openSession();
 
 			// -S makes sudo read password from stdin
@@ -38,29 +47,18 @@ public class Util {
 			session.waitForCondition(ChannelCondition.EXIT_SIGNAL, 0);
 
 			InputStream is = session.getStdout();
-			BufferedReader r = new BufferedReader(new InputStreamReader(is));
-			StringBuilder total = new StringBuilder();
-			String line;
-			while ((line = r.readLine()) != null)
-				total.append(line);
-
-			r.close();
+			String stdout = IOUtils.toString(is);
 			is.close();
 
 			is = session.getStderr();
-			r = new BufferedReader(new InputStreamReader(is));
-			StringBuilder err = new StringBuilder();
-			while ((line = r.readLine()) != null)
-				err.append(line);
-
-			r.close();
+			String stderr = IOUtils.toString(is);
 			is.close();
 
 			session.close();
 			conn.close();
 
-			Log.d("TGS", "Response: " + total.toString());
-			Log.d("TGS", "Err: " + err.toString());
+			Log.d("TGS", "Response: " + stdout.toString());
+			Log.d("TGS", "Err: " + stderr.toString());
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
