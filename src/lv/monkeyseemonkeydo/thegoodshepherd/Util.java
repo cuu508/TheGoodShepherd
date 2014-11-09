@@ -5,6 +5,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 
+import net.mafro.android.wakeonlan.MagicPacket;
+
 import org.apache.commons.io.IOUtils;
 
 import android.content.res.Resources;
@@ -15,9 +17,6 @@ import com.trilead.ssh2.Connection;
 import com.trilead.ssh2.Session;
 
 public class Util {
-	private static final String HOST = "192.168.1.120";
-	private static final String USER = "cepe";
-	private static final String PASSWORD = "z";
 
 	private static char[] getPrivateKey(Resources res) throws IOException {
 		InputStream is = res.openRawResource(R.raw.private_key);
@@ -28,11 +27,11 @@ public class Util {
 	}
 
 	public static void runSudo(Resources res, String command) {
-		Connection conn = new Connection(HOST);
+		Connection conn = new Connection(Consts.IP);
 		try {
 			conn.setTCPNoDelay(true);
 			conn.connect();
-			conn.authenticateWithPublicKey(USER, getPrivateKey(res), null);
+			conn.authenticateWithPublicKey(Consts.USER, getPrivateKey(res), null);
 			final Session session = conn.openSession();
 
 			// -S makes sudo read password from stdin
@@ -40,7 +39,7 @@ public class Util {
 
 			OutputStream os = session.getStdin();
 			PrintWriter pw = new PrintWriter(os);
-			pw.write(PASSWORD + "\n");
+			pw.write(Consts.PASSWORD + "\n");
 			pw.close();
 			os.close();
 
@@ -59,6 +58,14 @@ public class Util {
 
 			Log.d("TGS", "Response: " + stdout.toString());
 			Log.d("TGS", "Err: " + stderr.toString());
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	public static void sendWakeOnLanPacket() {
+		try {
+			MagicPacket.send(Consts.MAC, Consts.IP);
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
