@@ -12,7 +12,8 @@ public class PowerConnectionReceiver extends BroadcastReceiver {
         boolean isCharging = status == BatteryManager.BATTERY_STATUS_CHARGING ||
                             status == BatteryManager.BATTERY_STATUS_FULL;
 
-
-
+        Intent newIntent = new Intent(context, ProxyService.class);
+        newIntent.setAction(isCharging ? ProxyService.HANDLE_CHARGING : ProxyService.HANDLE_DISCHARGING);
+        context.startService(newIntent);
     }
 }

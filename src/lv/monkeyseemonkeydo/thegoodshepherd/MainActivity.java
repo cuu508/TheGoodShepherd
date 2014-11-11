@@ -16,17 +16,5 @@ public class MainActivity extends Activity {
 		// TODO Auto-generated method stub
 		super.onResume();
 
-
-		// Let's test our SSH thingy
-		(new Thread() {
-
-			@Override
-			public void run() {
-				//Util.runSudo(getResources(), "uname -a");
-				Util.sendWakeOnLanPacket();
-			}
-
-		}).start();
-
 	}
 }

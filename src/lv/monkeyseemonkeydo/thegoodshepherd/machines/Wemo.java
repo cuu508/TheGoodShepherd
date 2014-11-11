@@ -1,22 +1,25 @@
-package lv.monkeyseemonkeydo.thegoodshepherd;
+package lv.monkeyseemonkeydo.thegoodshepherd.machines;
 
 import lv.monkeyseemonkeydo.thegoodshepherd.actions.StartCooldown;
 import lv.monkeyseemonkeydo.thegoodshepherd.actions.SwitchWemoOff;
 import lv.monkeyseemonkeydo.thegoodshepherd.actions.SwitchWemoOn;
+import lv.monkeyseemonkeydo.thegoodshepherd.machines.Wifi.Trigger;
 
 import com.github.oxo42.stateless4j.StateMachine;
 import com.github.oxo42.stateless4j.StateMachineConfig;
 
-public class WemoStateMachine {
-	private enum State {
+public class Wemo {
+	public enum State {
 		ReachableOff, ReachableOn, ReachableCooldown, UnreachableWantOff, UnreachableWantOn, UnreachableCooldown
 	}
 
-	private enum Trigger {
+	public enum Trigger {
 		WifiConnected, WifiDisconnected, PeopleArrived, PeopleLeft, CooldownPassed
 	}
 
-	public StateMachine<State, Trigger> getInstance(State initialState) {
+	private StateMachine<State, Trigger> machine;
+
+	public Wemo(State initialState) {
 		StateMachineConfig<State, Trigger> wemoConfig = new StateMachineConfig<>();
 
 		// @formatter:off
@@ -48,8 +51,12 @@ public class WemoStateMachine {
 			.permit(Trigger.WifiConnected, State.ReachableCooldown);
 		// @formatter:on
 
-		return new StateMachine<>(initialState, wemoConfig);
-
+		machine = new StateMachine<>(initialState, wemoConfig);
 	}
+
+	public void fire(Trigger trigger) {
+		machine.fire(trigger);
+	}
+
 
 }

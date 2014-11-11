@@ -1,21 +1,24 @@
-package lv.monkeyseemonkeydo.thegoodshepherd;
+package lv.monkeyseemonkeydo.thegoodshepherd.machines;
 
 import lv.monkeyseemonkeydo.thegoodshepherd.actions.ShutdownPc;
 import lv.monkeyseemonkeydo.thegoodshepherd.actions.WakePc;
+import android.content.res.Resources;
 
 import com.github.oxo42.stateless4j.StateMachine;
 import com.github.oxo42.stateless4j.StateMachineConfig;
 
-public class PcStateMachine {
-	private enum State {
+public class Pc {
+	public enum State {
 		WantOffUnplugged, IsOff, WantOnUnplugged, IsOn
 	}
 
-	private enum Trigger {
+	public enum Trigger {
 		GotPluggedIn, GotUnplugged, PeopleArrived, PeopleLeft
 	}
 
-	public StateMachine<State, Trigger> getInstance(State initialState) {
+	private StateMachine<State, Trigger> machine;
+
+	public Pc(State initialState, Resources resources) {
 		StateMachineConfig<State, Trigger> pcConfig = new StateMachineConfig<>();
 
 		// @formatter:off
@@ -24,7 +27,7 @@ public class PcStateMachine {
 			.permit(Trigger.PeopleArrived, State.WantOnUnplugged);
 
 		pcConfig.configure(State.IsOff)
-			.onEntry(new ShutdownPc())
+			.onEntry(new ShutdownPc(resources))
 			.permit(Trigger.GotUnplugged, State.WantOffUnplugged)
 			.permit(Trigger.PeopleArrived, State.IsOn);
 
@@ -39,8 +42,12 @@ public class PcStateMachine {
 
 		// @formatter:on
 
-		return new StateMachine<>(initialState, pcConfig);
-
+		machine = new StateMachine<>(initialState, pcConfig);
 	}
+
+	public void fire(Trigger trigger) {
+		machine.fire(trigger);
+	}
+
 
 }
