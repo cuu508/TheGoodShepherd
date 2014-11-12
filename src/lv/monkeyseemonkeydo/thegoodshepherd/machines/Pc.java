@@ -2,7 +2,7 @@ package lv.monkeyseemonkeydo.thegoodshepherd.machines;
 
 import lv.monkeyseemonkeydo.thegoodshepherd.actions.ShutdownPc;
 import lv.monkeyseemonkeydo.thegoodshepherd.actions.WakePc;
-import android.content.res.Resources;
+import android.content.Context;
 
 import com.github.oxo42.stateless4j.StateMachine;
 import com.github.oxo42.stateless4j.StateMachineConfig;
@@ -18,7 +18,7 @@ public class Pc {
 
 	private StateMachine<State, Trigger> machine;
 
-	public Pc(State initialState, Resources resources) {
+	public Pc(State initialState, Context context) {
 		StateMachineConfig<State, Trigger> pcConfig = new StateMachineConfig<>();
 
 		// @formatter:off
@@ -27,7 +27,7 @@ public class Pc {
 			.permit(Trigger.PeopleArrived, State.WantOnUnplugged);
 
 		pcConfig.configure(State.IsOff)
-			.onEntry(new ShutdownPc(resources))
+			.onEntry(new ShutdownPc(context))
 			.permit(Trigger.GotUnplugged, State.WantOffUnplugged)
 			.permit(Trigger.PeopleArrived, State.IsOn);
 
@@ -48,6 +48,5 @@ public class Pc {
 	public void fire(Trigger trigger) {
 		machine.fire(trigger);
 	}
-
 
 }

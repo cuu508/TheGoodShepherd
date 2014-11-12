@@ -3,7 +3,7 @@ package lv.monkeyseemonkeydo.thegoodshepherd.machines;
 import lv.monkeyseemonkeydo.thegoodshepherd.actions.StartCooldown;
 import lv.monkeyseemonkeydo.thegoodshepherd.actions.SwitchWemoOff;
 import lv.monkeyseemonkeydo.thegoodshepherd.actions.SwitchWemoOn;
-import lv.monkeyseemonkeydo.thegoodshepherd.machines.Wifi.Trigger;
+import android.content.Context;
 
 import com.github.oxo42.stateless4j.StateMachine;
 import com.github.oxo42.stateless4j.StateMachineConfig;
@@ -19,7 +19,7 @@ public class Wemo {
 
 	private StateMachine<State, Trigger> machine;
 
-	public Wemo(State initialState) {
+	public Wemo(State initialState, Context context) {
 		StateMachineConfig<State, Trigger> wemoConfig = new StateMachineConfig<>();
 
 		// @formatter:off
@@ -34,7 +34,7 @@ public class Wemo {
     		.permit(Trigger.WifiDisconnected, State.UnreachableWantOn);
 
 		wemoConfig.configure(State.ReachableCooldown)
-    		.onEntry(new StartCooldown())
+    		.onEntry(new StartCooldown(context))
     		.permit(Trigger.CooldownPassed, State.ReachableOff)
     		.permit(Trigger.WifiDisconnected, State.UnreachableCooldown);
 

@@ -10,7 +10,7 @@ import lv.monkeyseemonkeydo.thegoodshepherd.R;
 
 import org.apache.commons.io.IOUtils;
 
-import android.content.res.Resources;
+import android.content.Context;
 import android.util.Log;
 
 import com.github.oxo42.stateless4j.delegates.Action;
@@ -22,9 +22,9 @@ public class ShutdownPc implements Action {
 
 	private char[] privateKey;
 
-	public ShutdownPc(Resources resources) {
+	public ShutdownPc(Context context) {
 		try {
-			InputStream is = resources.openRawResource(R.raw.private_key);
+			InputStream is = context.getResources().openRawResource(R.raw.private_key);
 			privateKey = IOUtils.toCharArray(is);
 			is.close();
 		} catch (IOException e) {

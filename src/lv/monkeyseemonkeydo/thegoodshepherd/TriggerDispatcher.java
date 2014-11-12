@@ -11,6 +11,7 @@ public class TriggerDispatcher extends IntentService {
 	public static String HANDLE_DISCHARGING = "shepherd.CHARGING";
 	public static String HANDLE_CONNECTED = "shepherd.CONNECTED";
 	public static String HANDLE_DISCONNECTED = "shepherd.DISCONNECTED";
+	public static String HANDLE_COOLDOWN = "shepherd.COODLOWN";
 
 
     public TriggerDispatcher() {
@@ -41,6 +42,10 @@ public class TriggerDispatcher extends IntentService {
         if (HANDLE_DISCONNECTED.equals(intent.getAction())) {
         	app.wifi.fire(Wifi.Trigger.GotDisconnected);
         	app.wemo.fire(Wemo.Trigger.WifiDisconnected);
+        }
+
+        if (HANDLE_COOLDOWN.equals(intent.getAction())) {
+        	app.wemo.fire(Wemo.Trigger.CooldownPassed);
         }
 
 
