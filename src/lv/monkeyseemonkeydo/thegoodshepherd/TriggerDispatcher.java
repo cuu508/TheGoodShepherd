@@ -12,7 +12,7 @@ public class TriggerDispatcher extends IntentService {
 	public static String HANDLE_CONNECTED = "shepherd.CONNECTED";
 	public static String HANDLE_DISCONNECTED = "shepherd.DISCONNECTED";
 	public static String HANDLE_COOLDOWN = "shepherd.COODLOWN";
-
+	public static String HANDLE_LOW_BATTERY = "shepherd.LOW_BATTERY";
 
     public TriggerDispatcher() {
         super("ProxyService");
