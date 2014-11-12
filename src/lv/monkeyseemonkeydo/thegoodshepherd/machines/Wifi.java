@@ -28,12 +28,11 @@ public class Wifi {
 
 		wifiConfig.configure(State.Connecting)
 			.onEntry(new ConnectWifi(context))
-			.permit(Trigger.GotConnected, State.Connected)
-			.permit(Trigger.GotDisconnected, State.Disconnected);
+			.permit(Trigger.GotConnected, State.Connected);
 
 		wifiConfig.configure(State.Connected)
 			.permit(Trigger.PeopleLeft, State.ConnectedInactive)
-			.permit(Trigger.GotDisconnected, State.Disconnected);
+			.permit(Trigger.GotDisconnected, State.Connecting);
 
 		wifiConfig.configure(State.ConnectedInactive)
 			.permit(Trigger.BatteryLow, State.Disconnected)

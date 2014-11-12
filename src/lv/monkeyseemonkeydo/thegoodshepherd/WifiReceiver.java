@@ -14,8 +14,8 @@ public class WifiReceiver extends BroadcastReceiver {
         NetworkInfo netInfo = conMan.getActiveNetworkInfo();
     	boolean isConnected = (netInfo != null && netInfo.getType() == ConnectivityManager.TYPE_WIFI);
 
-        Intent newIntent = new Intent(context, ProxyService.class);
-        newIntent.setAction(isConnected ? ProxyService.HANDLE_CONNECTED : ProxyService.HANDLE_DISCONNECTED);
+        Intent newIntent = new Intent(context, TriggerDispatcher.class);
+        newIntent.setAction(isConnected ? TriggerDispatcher.HANDLE_CONNECTED : TriggerDispatcher.HANDLE_DISCONNECTED);
         context.startService(newIntent);
 	}
 };

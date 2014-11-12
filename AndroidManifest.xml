@@ -28,7 +28,7 @@
         </activity>
 
         <service
-            android:name=".ProxyService"
+            android:name=".TriggerDispatcher"
             android:exported="false" />
 
         <receiver android:name=".PowerConnectionReceiver" >

@@ -6,14 +6,14 @@ import lv.monkeyseemonkeydo.thegoodshepherd.machines.Wifi;
 import android.app.IntentService;
 import android.content.Intent;
 
-public class ProxyService extends IntentService {
+public class TriggerDispatcher extends IntentService {
 	public static String HANDLE_CHARGING = "shepherd.CHARGING";
 	public static String HANDLE_DISCHARGING = "shepherd.CHARGING";
 	public static String HANDLE_CONNECTED = "shepherd.CONNECTED";
 	public static String HANDLE_DISCONNECTED = "shepherd.DISCONNECTED";
 
 
-    public ProxyService() {
+    public TriggerDispatcher() {
         super("ProxyService");
     }
 
