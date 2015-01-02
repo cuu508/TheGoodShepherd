@@ -10,7 +10,7 @@ It does two things:
 Start Up
 ========
 
-Startup is with Wake-on-LAN and is relatively easy: send a single specially crafted address. It's fire-and-forget, the app doesn't check if the PC actually booted or not. App needs to know IP and MAC of the target machine.
+Startup is with Wake-on-LAN and is relatively easy: send a single specially crafted packet. It's fire-and-forget, the app doesn't check if the PC actually booted or not. App needs to know IP and MAC of the target machine.
 
 Shut Down
 =========
@@ -20,4 +20,4 @@ The app connects to target machine using SSH. It then does "sudo shutdown -h now
 Cool, now, WHY?
 ===============
 
-My apartment happens to have an unused light switch and wiring right at the front door. Now add an AC socket, an AC charger, and finally a spare Android phone running this app. The light switch becomes a PC on/off switch. It's hacky, and it works.
+My apartment happens to have an unused light switch and wiring right at the front door. Now, add an AC charger, then a spare Android phone running this app. The light switch becomes a PC on/off switch. Yes it's hacky, and yes it works.
