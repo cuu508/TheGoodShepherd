@@ -8,6 +8,7 @@ import android.view.View;
 
 public class MainActivity extends Activity {
 
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -18,7 +19,6 @@ public class MainActivity extends Activity {
 	protected void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
-
 	}
 
 	public void onWakeClick(View v) {
@@ -28,10 +28,10 @@ public class MainActivity extends Activity {
 				// TODO Auto-generated method stub
 				(new WakePc()).doIt();
 			}
-			
+
 		}).start();
 	}
-	
+
 	public void onShutdownClick(View v) {
 		(new Thread() {
 			@Override
@@ -39,9 +39,8 @@ public class MainActivity extends Activity {
 				// TODO Auto-generated method stub
 				(new ShutdownPc(MainActivity.this)).doIt();
 			}
-			
+
 		}).start();
 	}
-	
 
 }
