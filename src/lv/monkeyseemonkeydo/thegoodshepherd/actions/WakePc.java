@@ -5,16 +5,15 @@ import java.io.IOException;
 import lv.monkeyseemonkeydo.thegoodshepherd.Consts;
 import net.mafro.android.wakeonlan.MagicPacket;
 
-import com.github.oxo42.stateless4j.delegates.Action;
-
 public class WakePc implements Action {
 
 	@Override
-	public void doIt() {
+	public boolean doIt() {
 		try {
 			MagicPacket.send(Consts.MAC, Consts.IP);
+			return true;
 		} catch (IOException e) {
-			throw new RuntimeException(e);
+			return false;
 		}
 	}
 

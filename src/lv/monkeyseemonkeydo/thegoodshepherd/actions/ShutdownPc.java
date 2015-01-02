@@ -13,7 +13,6 @@ import org.apache.commons.io.IOUtils;
 import android.content.Context;
 import android.util.Log;
 
-import com.github.oxo42.stateless4j.delegates.Action;
 import com.trilead.ssh2.ChannelCondition;
 import com.trilead.ssh2.Connection;
 import com.trilead.ssh2.Session;
@@ -36,7 +35,7 @@ public class ShutdownPc implements Action {
 	 * Opens SSH shell on target computer and executed "sudo shutdown -h now" over there.
 	 */
 	@Override
-	public void doIt() {
+	public boolean doIt() {
 		Connection conn = new Connection(Consts.IP);
 		try {
 			conn.setTCPNoDelay(true);
@@ -68,8 +67,10 @@ public class ShutdownPc implements Action {
 
 			Log.d("TGS", "Response: " + stdout.toString());
 			Log.d("TGS", "Err: " + stderr.toString());
+			
+			return true;
 		} catch (IOException e) {
-			throw new RuntimeException(e);
+			return false;
 		}
 	}
 }

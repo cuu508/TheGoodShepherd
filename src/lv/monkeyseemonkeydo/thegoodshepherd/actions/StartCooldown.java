@@ -8,8 +8,6 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 
-import com.github.oxo42.stateless4j.delegates.Action;
-
 public class StartCooldown implements Action {
 
 	private Context context;
@@ -19,7 +17,7 @@ public class StartCooldown implements Action {
 	}
 
 	@Override
-	public void doIt() {
+	public boolean doIt() {
         Intent intent = new Intent(context, TriggerDispatcher.class);
         intent.setAction(TriggerDispatcher.HANDLE_COOLDOWN);
 		PendingIntent pi = PendingIntent.getService(context, 0, intent, 0);
@@ -33,6 +31,8 @@ public class StartCooldown implements Action {
 		time.setTimeInMillis(System.currentTimeMillis());
 		time.add(Calendar.MINUTE, 5);
 		mgr.set(AlarmManager.RTC_WAKEUP, time.getTimeInMillis(), pi);
+		
+		return true;
 	}
 
 }

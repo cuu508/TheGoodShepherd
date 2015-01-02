@@ -3,8 +3,6 @@ package lv.monkeyseemonkeydo.thegoodshepherd.actions;
 import android.content.Context;
 import android.net.wifi.WifiManager;
 
-import com.github.oxo42.stateless4j.delegates.Action;
-
 public class DisconnectWifi implements Action {
 	private Context context;
 
@@ -13,9 +11,10 @@ public class DisconnectWifi implements Action {
 	}
 
 	@Override
-	public void doIt() {
+	public boolean doIt() {
 		WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
 		wifiManager.setWifiEnabled(false);
+		return true;
 	}
 
 }

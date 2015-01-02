@@ -1,8 +1,7 @@
 package lv.monkeyseemonkeydo.thegoodshepherd;
 
-import lv.monkeyseemonkeydo.thegoodshepherd.machines.Pc;
-import lv.monkeyseemonkeydo.thegoodshepherd.machines.Wemo;
-import lv.monkeyseemonkeydo.thegoodshepherd.machines.Wifi;
+import lv.monkeyseemonkeydo.thegoodshepherd.actions.ShutdownPc;
+import lv.monkeyseemonkeydo.thegoodshepherd.actions.WakePc;
 import android.app.IntentService;
 import android.content.Intent;
 
@@ -22,32 +21,17 @@ public class TriggerDispatcher extends IntentService {
     protected void onHandleIntent(Intent intent) {
         TheGoodApplication app = (TheGoodApplication) getApplication();
 
+        // If we're not connected to Wifi then do nothing for now-
+        if (!WifiReceiver.isConnected(app))
+    		return;
+        
         if (HANDLE_CHARGING.equals(intent.getAction())) {
-        	app.wifi.fire(Wifi.Trigger.PeopleArrived);
-        	app.wemo.fire(Wemo.Trigger.PeopleArrived);
-        	app.pc.fire(Pc.Trigger.PeopleArrived);
+        	(new WakePc()).doIt();
         }
 
         if (HANDLE_DISCHARGING.equals(intent.getAction())) {
-        	app.wifi.fire(Wifi.Trigger.PeopleLeft);
-        	app.wemo.fire(Wemo.Trigger.PeopleLeft);
-        	app.pc.fire(Pc.Trigger.PeopleLeft);
+        	(new ShutdownPc(app)).doIt();        	
         }
-
-        if (HANDLE_CONNECTED.equals(intent.getAction())) {
-        	app.wifi.fire(Wifi.Trigger.GotConnected);
-        	app.wemo.fire(Wemo.Trigger.WifiConnected);
-        }
-
-        if (HANDLE_DISCONNECTED.equals(intent.getAction())) {
-        	app.wifi.fire(Wifi.Trigger.GotDisconnected);
-        	app.wemo.fire(Wemo.Trigger.WifiDisconnected);
-        }
-
-        if (HANDLE_COOLDOWN.equals(intent.getAction())) {
-        	app.wemo.fire(Wemo.Trigger.CooldownPassed);
-        }
-
 
     }
 }
